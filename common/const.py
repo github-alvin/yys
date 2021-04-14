@@ -13,6 +13,9 @@ GLOBAL_SIFT_SHARE = image("global_share.png", (0.777, 0.273), RESOLUTION)
 # 战斗结束继续界面
 GLOBAL_SIFT_CONTINUE = image("global_continue.png", (0.855, 0.395), RESOLUTION)
 
+# 战斗胜利
+GLOBAL_SIFT_VICTORY = image("global_victory.png", (0.169, -0.039), RESOLUTION)
+
 # 组队队员槽
 GLOBAL_TEAMMATES_SLOT = image("team_mates_slot.png", (0.77, 0.046), RESOLUTION)
 

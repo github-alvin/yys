@@ -3,13 +3,14 @@ import argparse
 import logging
 import sys
 
-logging.disable(logging.INFO)
+logging.disable(logging.ERROR)
 
 from airtest.core.helper import G
 from common.utils import connect
 
 from script import auto_team
 from script import chi
+from script import tupo
 
 
 def _get_parser():
@@ -39,6 +40,8 @@ def main(argv=None):
     if args.action == "auto":
         if args.script == "1":
             runner = chi
+        elif args.script == "2":
+            runner = tupo
     elif args.action == "team":
         runner = auto_team
     else:
