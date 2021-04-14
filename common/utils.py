@@ -38,6 +38,8 @@ def get_current_resolution():
 
 
 def wati_util(v, condition, timeout=60, interval=0.5):
+    """等待符合条件的对象
+    """
     start_time = time.time()
     while True:
         ret = find_all(v)
@@ -46,3 +48,19 @@ def wati_util(v, condition, timeout=60, interval=0.5):
         if (time.time() - start_time) > timeout:
             raise TargetNotFoundError('Continue %s not found in screen' % v)
         time.sleep(interval)
+
+
+def select(vs, timeout=60, interval=0.5):
+    """等待多个对象，返回第一个匹配到的对象
+    """
+    start_time = time.time()
+    while True:
+        for idx, v in enumerate(vs):
+            ret = find_all(v)
+            if ret:
+                return idx, ret
+        if (time.time() - start_time) > timeout:
+            raise TargetNotFoundError('Continue %s not found in screen' % v)
+        time.sleep(interval)
+
+

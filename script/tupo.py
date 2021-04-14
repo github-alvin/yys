@@ -5,11 +5,11 @@ import time
 
 from airtest.core.api import *
 from airtest.core.cv import Predictor
-from common.const import GLOBAL_SIFT_CONTINUE, GLOBAL_SIFT_VICTORY
-from common.utils import random_pos, touch_pos, image, get_current_resolution
+from common.const import GLOBAL_SIFT_CONTINUE, GLOBAL_SIFT_VICTORY, GLOBAL_SIFT_FAILED
+from common.utils import random_pos, touch_pos, image, get_current_resolution, select
 
 
-MAX_WAIT_TIME =  2 * 60
+MAX_WAIT_TIME =  5 * 60
 
 # 突破名单窗口坐标偏移
 COMMON_POS = (
@@ -35,24 +35,26 @@ def calc_pos():
 def fuck(idx, pos):
     # 选择进攻
     touch_pos(pos)
+    time.sleep(0.5)
+
     button = exists(challenge_button)
     if not button:
-        print(f"第{idx}号结界已挑战过，跳过")
-        return False
+        print(f"第{idx + 1}号结界已挑战过，跳过")
+        return -1
     # 确认进攻
-    touch_pos(button)
+    touch_pos(button, 2)
     # 等待挑战结束
-    try:
-        wait(GLOBAL_SIFT_VICTORY, timeout=MAX_WAIT_TIME)
-    except Exception:
-        print(f"第{idx}号结界挑战失败，请注意更换阵容")
-        return False
+    ret, _ = select((GLOBAL_SIFT_VICTORY, GLOBAL_SIFT_FAILED), timeout=MAX_WAIT_TIME)
+    # 挑战失败
+    if ret == 1:
+        print(f"第{idx + 1}号结界挑战失败，请注意更换阵容")
+        return -2
     # 再次确认跳过等待时间
     pos = wait(GLOBAL_SIFT_CONTINUE, timeout=MAX_WAIT_TIME)
     touch_pos(random_pos(pos, 50, 100, 0, 1), 2)
     time.sleep(4)
     touch_pos(random_pos(pos, 50, 100, 0, 1), 2)
-    return True
+    return 0
 
 
 def run(args):
@@ -62,10 +64,11 @@ def run(args):
     while(True):
         cnt = 0
         for idx, pos in enumerate(targets):
-            if(fuck(idx, pos)):
+            ret = fuck(idx, pos)
+            if ret in (0, -1):
                 cnt += 1
             # 每三次成功额外奖励结算时间
-            if cnt and cnt % 3 == 0:
+            if not ret and cnt and cnt % 3 == 0:
                 print("等待额外奖励结算")
                 time.sleep(4)
         if cnt < 9:
