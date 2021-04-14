@@ -78,8 +78,8 @@ def run(args):
                 cnt += 1
             # 每三次成功额外奖励结算时间
             if not ret and cnt and cnt % 3 == 0:
-                print("等待额外奖励结算")
-                time.sleep(4)
+                print("等待额外奖励结算...")
+                time.sleep(5)
         if cnt < 9:
             print("部分挑战失败，请更换阵容再试！")
             break
