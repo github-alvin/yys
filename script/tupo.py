@@ -21,6 +21,9 @@ COMMON_POS = (
 # 挑战按钮
 challenge_button = image("tupo_fuck.png", (0, 0), (1152, 679))
 
+# 挑战券不足
+tip_noticket = image("tupo_no_ticket.png", (0.221, 0.083), (1152, 679))
+
 
 def calc_pos():
     """ 根据当前分辨率计算出每个突破可选窗口坐标
@@ -41,14 +44,18 @@ def fuck(idx, pos):
     if not button:
         print(f"第{idx + 1}号结界已挑战过，跳过")
         return -1
-    # 确认进攻
+     # 确认进攻
     touch_pos(button, 2)
+    if(exists(tip_noticket)):
+        print("挑战券不足，脚本终止")
+        return -2
+
     # 等待挑战结束
     ret, _ = select((GLOBAL_SIFT_VICTORY, GLOBAL_SIFT_FAILED), timeout=MAX_WAIT_TIME)
     # 挑战失败
     if ret == 1:
         print(f"第{idx + 1}号结界挑战失败，请注意更换阵容")
-        return -2
+        return -3
     # 再次确认跳过等待时间
     pos = wait(GLOBAL_SIFT_CONTINUE, timeout=MAX_WAIT_TIME)
     touch_pos(random_pos(pos, 50, 100, 0, 1), 2)
@@ -65,6 +72,8 @@ def run(args):
         cnt = 0
         for idx, pos in enumerate(targets):
             ret = fuck(idx, pos)
+            if ret == -2:
+                return
             if ret in (0, -1):
                 cnt += 1
             # 每三次成功额外奖励结算时间
