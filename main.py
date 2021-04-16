@@ -6,7 +6,7 @@ import sys
 logging.disable(logging.ERROR)
 
 from airtest.core.helper import G
-from common.utils import connect
+from common.utils import connect_windows, connect_android
 
 from script import auto_team
 from script import chi
@@ -15,6 +15,7 @@ from script import tupo
 
 def _get_parser():
     ap = argparse.ArgumentParser(description="yys auto tool")
+    ap.add_argument('--android', help='connect to android device')
     subparsers = ap.add_subparsers(dest="action", help="auto/")
 
     ap_run = subparsers.add_parser("auto", help="自动挂机")
@@ -26,15 +27,19 @@ def _get_parser():
 
 
 def main(argv=None):
-    # 连接设备
-    if connect("阴阳师-网易游戏"):
-        sys.exit(1)
-
-    print("\n客户端连接成功")
-
     ap = _get_parser()
     args = ap.parse_args(argv)
 
+    # 连接设备
+    if args.android:
+        print("连接安卓设备%s" % args.android)
+        if connect_android(args.android):
+            sys.exit(1)
+    else:
+        if connect_windows("阴阳师-网易游戏"):
+            sys.exit(1)
+    print("\n设备连接成功")
+    
     runner = None
 
     if args.action == "auto":

@@ -80,6 +80,8 @@ def run(args):
             if not ret and cnt and cnt % 3 == 0:
                 print("等待额外奖励结算...")
                 time.sleep(5)
+                touch_pos(pos)
+                time.sleep(1)
         if cnt < 9:
             print("部分挑战失败，请更换阵容再试！")
             break

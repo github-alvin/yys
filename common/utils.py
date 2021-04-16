@@ -6,12 +6,26 @@ from airtest.core.error import TargetNotFoundError
 from airtest.core.helper import (G, delay_after_operation)
 
 
-def connect(name):
+def connect_windows(name):
+    """ 连接win设备
+    """
     try:
         connect_device("windows:///?title_re=%s" % name)
     except Exception as e:
         print("connect failed! Please check or report it: ", e)
         return 1
+    return 0
+
+
+def connect_android(seq):
+    """ 连接安卓设备
+    """
+    try:
+        connect_device("Android:///%s" % seq)
+    except Exception as e:
+        print("connect android failed! Please check or report it: ", e)
+        return 1
+    print(G.DEVICE.get_display_info())
     return 0
 
 
