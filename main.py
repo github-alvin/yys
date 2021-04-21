@@ -11,6 +11,7 @@ from common.utils import connect_windows, connect_android
 from script import auto_team
 from script import chi
 from script import tupo
+from script import yuling
 
 
 def _get_parser():
@@ -47,6 +48,8 @@ def main(argv=None):
             runner = chi
         elif args.script == "2":
             runner = tupo
+        elif args.script == "3":
+            runner = yuling
     elif args.action == "team":
         runner = auto_team
     else:
