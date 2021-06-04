@@ -12,6 +12,7 @@ from script import auto_team
 from script import chi
 from script import tupo
 from script import yuling
+from script import huodong
 
 
 def _get_parser():
@@ -50,6 +51,8 @@ def main(argv=None):
             runner = tupo
         elif args.script == "3":
             runner = yuling
+        elif args.script == "4":
+            runner = huodong
     elif args.action == "team":
         runner = auto_team
     else:
